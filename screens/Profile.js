@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, SafeAreaView, Pressable } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Pressable,Image } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { signOut } from 'firebase/auth';
@@ -6,8 +6,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 const Profile = () => {
   const [name, setName] = useState(null);
-  const [apiKey, setApiKey] = useState(null);
-  const Api_Key = apiKey;
+  const [email, SetEmail] = useState(null);
   const user = auth.currentUser;
   const naviagtion = useNavigation();
   const signOutUser = () => {
@@ -24,23 +23,32 @@ const Profile = () => {
       const docSnap = await getDoc(colRef);
       if (docSnap.exists()) {
         setName(docSnap.data().userName);
-        setApiKey(docSnap.data().apiKey);
+        SetEmail(docSnap.data().email);
       }
     };
     fetchUserdata();
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', backgroundColor:'white', alignItems: 'center' }}>
+    <SafeAreaView style={{ flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      padding: 10 }}>
+       <View style={styles.bottext}>
+        <Text style={styles.title}>Profile</Text>
+        <Image style={{ width: 50, height: 30 }} source={require('../assets/Images/Image5.jpg')} />
+
+      </View>
       <Pressable style={{ marginVertical: 10 }}>
-        <Text style={styles.text}>welcome: {user.email}</Text>
+        <Text style={styles.text}>Welcome: {email}</Text>
         <Text style={styles.text}>User Name: {name}</Text>
-        <Text style={styles.text}>{Api_Key}</Text>
       </Pressable>
       <Pressable onPress={signOutUser}>
         <Text style={styles.signOut}>sign Out</Text>
 
       </Pressable>
+      <Image style={styles.image} source={require("../assets/Images/Image3.jpg")}/>
+      
     </SafeAreaView>
 
   )
@@ -68,7 +76,22 @@ const styles = StyleSheet.create({
     backgroundColor:'blue',
     borderColor:'blue',
     borderRadius:10,
-
+  },
+  bottext: {
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+  },
+  title: {
+    color: '#0a365e',
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  image:{
+    width: '100%',
+    height: '70%',
+    margin: 5,
 
   }
 });
